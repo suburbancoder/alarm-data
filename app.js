@@ -15,7 +15,6 @@ const translations = {
     tableTitle: "Recent Alarms",
     thTime: "Time",
     thCities: "Cities",
-    thThreat: "Threat",
     thDescription: "Description",
     thOrigin: "Origin",
     loading: "Loading data...",
@@ -53,7 +52,6 @@ const translations = {
     tableTitle: "Alarmes Récentes",
     thTime: "Heure",
     thCities: "Villes",
-    thThreat: "Menace",
     thDescription: "Description",
     thOrigin: "Origine",
     loading: "Chargement des données...",
@@ -91,7 +89,6 @@ const translations = {
     tableTitle: "התראות אחרונות",
     thTime: "זמן",
     thCities: "ערים",
-    thThreat: "איום",
     thDescription: "תיאור",
     thOrigin: "מקור",
     loading: "טוען נתונים...",
@@ -171,7 +168,6 @@ const els = {
   tableTitle: document.getElementById('table-title'),
   thTime: document.getElementById('th-time'),
   thCities: document.getElementById('th-cities'),
-  thThreat: document.getElementById('th-threat'),
   thDescription: document.getElementById('th-description'),
   thOrigin: document.getElementById('th-origin'),
   loadingState: document.getElementById('loading-state'),
@@ -238,7 +234,6 @@ function updateTranslations() {
   els.tableTitle.firstChild.textContent = t.tableTitle + " (";
   els.thTime.textContent = t.thTime;
   els.thCities.textContent = t.thCities;
-  els.thThreat.textContent = t.thThreat;
   els.thDescription.textContent = t.thDescription;
   els.thOrigin.textContent = t.thOrigin;
   els.loadingState.textContent = t.loading;
@@ -644,7 +639,6 @@ function renderTable(data) {
     tr.innerHTML = `
       <td>${row.time || ''}</td>
       <td>${translateText(row.cities, 'city')}</td>
-      <td>${row.threat || ''}</td>
       <td>${translateText(row.description, 'description')}</td>
       <td>${translateText(row.origin, 'origin')}</td>
     `;
@@ -654,7 +648,7 @@ function renderTable(data) {
   els.alarmsTbody.appendChild(fragment);
   if (data.length > 500) {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="5" style="text-align:center; color: var(--text-secondary)">Showing latest 500 of ${data.length} alarms...</td>`;
+    tr.innerHTML = `<td colspan="4" style="text-align:center; color: var(--text-secondary)">Showing latest 500 of ${data.length} alarms...</td>`;
     els.alarmsTbody.appendChild(tr);
   }
 }
