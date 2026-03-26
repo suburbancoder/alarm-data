@@ -3,7 +3,7 @@ import re
 
 APP_JS_PATH = 'app.js'
 STYLES_CSS_PATH = 'styles.css'
-INDEX_HTML_PATH = 'index.html'
+INDEX_HTML_PATH = 'index_source.html'
 BUNDLE_PATH = 'bundle.html'
 
 with open(APP_JS_PATH, 'r') as f:
