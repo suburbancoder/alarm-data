@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Israel Alarms Viewer</title>
+  <meta name="description" content="Dynamically load and filter alert data in Israel.">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="header glass">
+      <div class="header-left">
+        <h1 id="app-title">Israel Alarms Viewer</h1>
+        <button id="refresh-btn" class="btn primary" aria-label="Refresh Data">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span id="refresh-text">Refresh</span>
+        </button>
+      </div>
+      <div class="header-right">
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="fr">FR</button>
+          <button class="lang-btn" data-lang="he">HE</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="filters glass">
+        <div class="filter-group">
+          <label for="start-date" id="label-start-date">Start Date</label>
+          <input type="date" id="start-date">
+        </div>
+        <div class="filter-group">
+          <label for="end-date" id="label-end-date">End Date</label>
+          <input type="date" id="end-date">
+        </div>
+        <div class="filter-group">
+          <label for="city-filter" id="label-city">City</label>
+          <small id="label-city-desc" style="display:block; font-size:0.75rem; color:var(--text-secondary); margin-bottom:4px; margin-top:-4px;">Choose 1 city at a time</small>
+          <select id="city-filter" class="city-select">
+            <option value="" id="opt-all-cities">All Cities</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+          <button id="apply-filter-btn" class="btn secondary">
+            <span id="apply-filter-text">Apply Filter</span>
+          </button>
+          <button id="clear-filter-btn" class="btn outline">
+            <span id="clear-filter-text">All Time</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="dashboard glass hidden" id="dashboard-section">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <h3 id="lbl-total-alerts">Total Alerts</h3>
+            <p id="val-total-alerts" class="metric-value">0</p>
+          </div>
+          <div class="metric-card">
+            <h3 id="lbl-disruption-time">Disruption Time (Hrs)</h3>
+            <p id="val-disruption-time" class="metric-value">0</p>
+            <small id="lbl-disruption-desc">15m per alert</small>
+          </div>
+          <div class="metric-card">
+            <h3 id="lbl-sleep-mild">Mild Sleep Impairment</h3>
+            <p id="val-sleep-mild" class="metric-value">0</p>
+            <small id="lbl-sleep-mild-desc">1 overnight alert</small>
+          </div>
+          <div class="metric-card">
+            <h3 id="lbl-sleep-major">Major Sleep Impairment</h3>
+            <p id="val-sleep-major" class="metric-value">0</p>
+            <small id="lbl-sleep-major-desc">2+ overnight alerts</small>
+          </div>
+        </div>
+        
+        <div class="chart-section">
+          <div class="chart-header">
+            <h3 id="lbl-chart-title">Alerts Timeline</h3>
+            <div class="chart-controls">
+              <button class="btn outline chart-btn active" data-group="day" id="btn-group-day">Day</button>
+              <button class="btn outline chart-btn" data-group="week" id="btn-group-week">Week</button>
+              <button class="btn outline chart-btn" data-group="month" id="btn-group-month">Month</button>
+              <button class="btn secondary hidden" id="btn-chart-back">Back to Days</button>
+            </div>
+          </div>
+          <div class="canvas-wrapper">
+             <canvas id="alertsChart"></canvas>
+          </div>
+          <div class="chart-legend" id="chart-legend">
+            <div class="legend-item"><span class="color-box" style="background: rgba(255, 255, 255, 0.7)"></span><span id="leg-none">No Sleep Impairment</span></div>
+            <div class="legend-item"><span class="color-box" style="background: #ffa502"></span><span id="leg-mild">Mild (1 Alert)</span></div>
+            <div class="legend-item"><span class="color-box" style="background: #ff4757"></span><span id="leg-major">Major (2+ Alerts)</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="data-section glass">
+        <div class="table-header">
+          <h2 id="table-title">Recent Alarms (<span id="alarm-count">0</span>)</h2>
+        </div>
+        <div class="table-container">
+          <table id="alarms-table">
+            <thead>
+              <tr>
+                <th id="th-time">Time</th>
+                <th id="th-cities">Cities</th>
+                <th id="th-threat">Threat</th>
+                <th id="th-description">Description</th>
+                <th id="th-origin">Origin</th>
+              </tr>
+            </thead>
+            <tbody id="alarms-tbody">
+              <!-- Rows populated by JS -->
+            </tbody>
+          </table>
+          <div id="loading-state" class="state-message">Loading data...</div>
+          <div id="empty-state" class="state-message hidden">No alarms found for the selected period.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
