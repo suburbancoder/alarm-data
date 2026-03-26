@@ -509,8 +509,8 @@ html[dir="rtl"] .btn svg {
           </div>
           <div class="chart-legend" id="chart-legend">
             <div class="legend-item"><span class="color-box" style="background: rgba(255, 255, 255, 0.7)"></span><span id="leg-none">No Sleep Impairment</span></div>
-            <div class="legend-item"><span class="color-box" style="background: #ffa502"></span><span id="leg-mild">Mild (1 Alert)</span></div>
-            <div class="legend-item"><span class="color-box" style="background: #ff4757"></span><span id="leg-major">Major (2+ Alerts)</span></div>
+            <div class="legend-item"><span class="color-box" style="background: #ffa502"></span><span id="leg-mild">1 overnight alert</span></div>
+            <div class="legend-item"><span class="color-box" style="background: #ff4757"></span><span id="leg-major">2 or more overnight alerts</span></div>
           </div>
         </div>
       </section>
@@ -525,7 +525,6 @@ html[dir="rtl"] .btn svg {
               <tr>
                 <th id="th-time">Time</th>
                 <th id="th-cities">Cities</th>
-                <th id="th-threat">Threat</th>
                 <th id="th-description">Description</th>
                 <th id="th-origin">Origin</th>
               </tr>
@@ -558,7 +557,6 @@ const translations = {
     tableTitle: "Recent Alarms",
     thTime: "Time",
     thCities: "Cities",
-    thThreat: "Threat",
     thDescription: "Description",
     thOrigin: "Origin",
     loading: "Loading data...",
@@ -580,8 +578,8 @@ const translations = {
     btnGroupMonth: "Month",
     btnChartBack: "Back to Days",
     legNone: "No Sleep Impairment",
-    legMild: "Mild (1 Alert)",
-    legMajor: "Major (2+ Alerts)"
+    legMild: "1 overnight alert",
+    legMajor: "2 or more overnight alerts"
   },
   fr: {
     appTitle: "Visionneuse d'Alarmes",
@@ -596,7 +594,6 @@ const translations = {
     tableTitle: "Alarmes Récentes",
     thTime: "Heure",
     thCities: "Villes",
-    thThreat: "Menace",
     thDescription: "Description",
     thOrigin: "Origine",
     loading: "Chargement des données...",
@@ -618,8 +615,8 @@ const translations = {
     btnGroupMonth: "Mois",
     btnChartBack: "Retour aux Jours",
     legNone: "Aucune Perturbation",
-    legMild: "Légère (1 Alarme)",
-    legMajor: "Majeure (2+ Alarmes)"
+    legMild: "1 alarme nocturne",
+    legMajor: "2 alarmes nocturnes ou plus"
   },
   he: {
     appTitle: "מציג נתוני התראות",
@@ -634,7 +631,6 @@ const translations = {
     tableTitle: "התראות אחרונות",
     thTime: "זמן",
     thCities: "ערים",
-    thThreat: "איום",
     thDescription: "תיאור",
     thOrigin: "מקור",
     loading: "טוען נתונים...",
@@ -656,8 +652,8 @@ const translations = {
     btnGroupMonth: "חודש",
     btnChartBack: "חזרה לימים",
     legNone: "אין פגיעה בשינה",
-    legMild: "קלה (התראה 1)",
-    legMajor: "חמורה (+2 התראות)"
+    legMild: "התראת לילה 1",
+    legMajor: "2 התראות לילה או יותר"
   }
 };
 
@@ -714,7 +710,6 @@ const els = {
   tableTitle: document.getElementById('table-title'),
   thTime: document.getElementById('th-time'),
   thCities: document.getElementById('th-cities'),
-  thThreat: document.getElementById('th-threat'),
   thDescription: document.getElementById('th-description'),
   thOrigin: document.getElementById('th-origin'),
   loadingState: document.getElementById('loading-state'),
@@ -780,7 +775,6 @@ function updateTranslations() {
   els.tableTitle.firstChild.textContent = t.tableTitle + " (";
   els.thTime.textContent = t.thTime;
   els.thCities.textContent = t.thCities;
-  els.thThreat.textContent = t.thThreat;
   els.thDescription.textContent = t.thDescription;
   els.thOrigin.textContent = t.thOrigin;
   els.loadingState.textContent = t.loading;
@@ -1108,8 +1102,8 @@ function renderChart(data) {
                         const idx = context.dataIndex;
                         const date = sortedKeys[idx];
                         const impairment = sleepImpairmentByDay[date] || 0;
-                        if (impairment >= 2) return `Major Sleep Impairment (${impairment} alerts)`;
-                        if (impairment === 1) return `Mild Sleep Impairment (1 alert)`;
+                        if (impairment >= 2) return `${translations[currentLang].legMajor}`;
+                        if (impairment === 1) return `${translations[currentLang].legMild}`;
                     }
                     return null;
                 }
@@ -1185,7 +1179,6 @@ function renderTable(data) {
     tr.innerHTML = `
       <td>${row.time || ''}</td>
       <td>${translateText(row.cities, 'city')}</td>
-      <td>${row.threat || ''}</td>
       <td>${translateText(row.description, 'description')}</td>
       <td>${translateText(row.origin, 'origin')}</td>
     `;
@@ -1195,7 +1188,7 @@ function renderTable(data) {
   els.alarmsTbody.appendChild(fragment);
   if (data.length > 500) {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="5" style="text-align:center; color: var(--text-secondary)">Showing latest 500 of ${data.length} alarms...</td>`;
+    tr.innerHTML = `<td colspan="4" style="text-align:center; color: var(--text-secondary)">Showing latest 500 of ${data.length} alarms...</td>`;
     els.alarmsTbody.appendChild(tr);
   }
 }

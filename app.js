@@ -36,8 +36,8 @@ const translations = {
     btnGroupMonth: "Month",
     btnChartBack: "Back to Days",
     legNone: "No Sleep Impairment",
-    legMild: "Mild (1 Alert)",
-    legMajor: "Major (2+ Alerts)"
+    legMild: "1 overnight alert",
+    legMajor: "2 or more overnight alerts"
   },
   fr: {
     appTitle: "Visionneuse d'Alarmes",
@@ -73,8 +73,8 @@ const translations = {
     btnGroupMonth: "Mois",
     btnChartBack: "Retour aux Jours",
     legNone: "Aucune Perturbation",
-    legMild: "Légère (1 Alarme)",
-    legMajor: "Majeure (2+ Alarmes)"
+    legMild: "1 alarme nocturne",
+    legMajor: "2 alarmes nocturnes ou plus"
   },
   he: {
     appTitle: "מציג נתוני התראות",
@@ -110,8 +110,8 @@ const translations = {
     btnGroupMonth: "חודש",
     btnChartBack: "חזרה לימים",
     legNone: "אין פגיעה בשינה",
-    legMild: "קלה (התראה 1)",
-    legMajor: "חמורה (+2 התראות)"
+    legMild: "התראת לילה 1",
+    legMajor: "2 התראות לילה או יותר"
   }
 };
 
@@ -561,8 +561,8 @@ function renderChart(data) {
                         const idx = context.dataIndex;
                         const date = sortedKeys[idx];
                         const impairment = sleepImpairmentByDay[date] || 0;
-                        if (impairment >= 2) return `Major Sleep Impairment (${impairment} alerts)`;
-                        if (impairment === 1) return `Mild Sleep Impairment (1 alert)`;
+                        if (impairment >= 2) return `${translations[currentLang].legMajor}`;
+                        if (impairment === 1) return `${translations[currentLang].legMild}`;
                     }
                     return null;
                 }
