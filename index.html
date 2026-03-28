@@ -480,7 +480,7 @@ html[dir="rtl"] .btn svg {
           <div class="metric-card">
             <h3 id="lbl-disruption-time">Disruption Time (Hrs)</h3>
             <p id="val-disruption-time" class="metric-value">0</p>
-            <small id="lbl-disruption-desc">15m per alert</small>
+            <small id="lbl-disruption-desc">20m per alert</small>
           </div>
           <div class="metric-card">
             <h3 id="lbl-sleep-mild">1 overnight alert</h3>
@@ -563,7 +563,7 @@ const translations = {
     empty: "No alarms found for the selected period.",
     lblTotalAlerts: "Total Alerts",
     lblDisruptionTime: "Disruption Time (Hrs)",
-    lblDisruptionDesc: "15m per alert",
+    lblDisruptionDesc: "20m per alert",
     lblSleepMild: "1 overnight alert",
     lblSleepMildDesc: "1 alert (10 PM - 7 AM)",
     lblSleepMajor: "2 or more overnight alerts",
@@ -600,7 +600,7 @@ const translations = {
     empty: "Aucune alarme trouvée pour cette période.",
     lblTotalAlerts: "Total des Alarmes",
     lblDisruptionTime: "Temps de Perturbation (Hrs)",
-    lblDisruptionDesc: "15m par alarme",
+    lblDisruptionDesc: "20m par alarme",
     lblSleepMild: "1 alarme nocturne",
     lblSleepMildDesc: "1 alarme (22h - 7h)",
     lblSleepMajor: "2 alarmes nocturnes ou plus",
@@ -637,7 +637,7 @@ const translations = {
     empty: "לא נמצאו התראות שמתאימות לסינון.",
     lblTotalAlerts: "סך הכל התראות",
     lblDisruptionTime: "זמן שיבוש (שעות)",
-    lblDisruptionDesc: "15 דק' להתראה",
+    lblDisruptionDesc: "20 דק' להתראה",
     lblSleepMild: "התראת לילה 1",
     lblSleepMildDesc: "התראת לילה (22:00-07:00)",
     lblSleepMajor: "2 התראות לילה או יותר",
@@ -1126,7 +1126,7 @@ function renderDashboard(data) {
   els.dashboardSection.classList.remove('hidden');
 
   els.valTotalAlerts.textContent = data.length;
-  const disruptionHours = (data.length * 15) / 60;
+  const disruptionHours = (data.length * 20) / 60;
   els.valDisruptionTime.textContent = (Math.round(disruptionHours * 10) / 10).toLocaleString();
 
   const nightsMap = {}; 
